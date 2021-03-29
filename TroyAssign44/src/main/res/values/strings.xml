@@ -7,4 +7,8 @@
     <string name="answer">Yes</string>
     <string name="answer2">No</string>
     <string name="nMandId">Troy Johnson s991530754</string>
+    <string name="sms">Sms</string>
+    <string name="loc">Location</string>
+    <string name="help">Help</string>
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>
