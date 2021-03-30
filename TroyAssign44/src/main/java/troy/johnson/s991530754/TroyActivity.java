@@ -137,18 +137,31 @@ public class TroyActivity extends AppCompatActivity {
 
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        mDrawerLayout.openDrawer(GravityCompat.START);
+        Intent intent = null;
 
         switch (item.getItemId()) {
+            case R.id.help:
+                intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://www.amazon.ca/"));
+                startActivity(intent);
+                break;
+            case R.id.loc:
+                Toast.makeText(this, "My name is Troy Johnson", Toast.LENGTH_LONG).show();;
+                break;
+            case R.id.sms:
+                Toast.makeText(this, "My name is Troy Johnson", Toast.LENGTH_LONG).show();
+                break;
             case android.R.id.home: // START to slide from left
                 mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
+                break;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
