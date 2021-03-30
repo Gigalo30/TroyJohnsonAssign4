@@ -46,20 +46,15 @@ public class DownloadFrag extends Fragment {
         Button button = root.findViewById(R.id.troyBtnDwn);
         imageView = root.findViewById(R.id.troyDwnImg);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AsyncTaskExample asyncTask = new AsyncTaskExample();
-                asyncTask.execute("https://www.tutorialspoint.com/images/tp-logo-diamond.png");
-            }
-        });
-
-
         Spinner spinnerNature = root.findViewById(R.id.troySpinner);
 
         mAdapter = new NatureAdapter(this.getActivity(), mNatureItem);
         spinnerNature.setAdapter(mAdapter);
 
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
         spinnerNature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -72,9 +67,14 @@ public class DownloadFrag extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
+                AsyncTaskExample asyncTask = new AsyncTaskExample();
+                asyncTask.execute("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/sunflower-1508785046.jpg");
+            }
+        });
         return root;
     }
+
+
 
     private void initList() {
         mNatureItem = new ArrayList<>();
@@ -82,8 +82,6 @@ public class DownloadFrag extends Fragment {
         mNatureItem.add(new NatureItem("Nature", R.drawable.nature));
         mNatureItem.add(new NatureItem("Sky", R.drawable.sky));
     }
-
-
 
     //The Async class to download image
     private class AsyncTaskExample extends AsyncTask<String, String, Bitmap> {

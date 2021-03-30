@@ -32,8 +32,8 @@
 
     <ImageView
         android:id="@+id/troyDwnImg"
-        android:layout_width="198dp"
-        android:layout_height="166dp"
+        android:layout_width="243dp"
+        android:layout_height="200dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
