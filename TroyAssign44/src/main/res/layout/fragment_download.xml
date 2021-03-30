@@ -5,19 +5,42 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#90EE90"
-    >
+    android:background="#90EE90">
 
     <Spinner
-        android:id="@+id/planets_spinner"
-        android:layout_width="111dp"
-        android:layout_height="44dp"
+        android:id="@+id/troySpinner"
+        android:layout_width="395dp"
+        android:layout_height="153dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.434"
+        app:layout_constraintHorizontal_bias="0.056"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.132" />
+        app:layout_constraintVertical_bias="0.053" />
+
+    <Button
+        android:id="@+id/troyBtnDwn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click to download image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.452"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.352" />
+
+    <ImageView
+        android:id="@+id/troyDwnImg"
+        android:layout_width="198dp"
+        android:layout_height="166dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.427"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.596" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
