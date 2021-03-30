@@ -52,23 +52,20 @@ public class DownloadFrag extends Fragment {
         spinnerNature.setAdapter(mAdapter);
 
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+
         spinnerNature.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 NatureItem clickedItem = (NatureItem) parent.getItemAtPosition(position);
                 String clickedItemName = clickedItem.getNatureItem();
-                Toast.makeText(getActivity(), clickedItemName + "selected", Toast.LENGTH_SHORT).show();
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View view) {
+                        clicked(clickedItemName);
+                    }
+                });
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-                AsyncTaskExample asyncTask = new AsyncTaskExample();
-                asyncTask.execute("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/sunflower-1508785046.jpg");
             }
         });
         return root;
@@ -83,8 +80,25 @@ public class DownloadFrag extends Fragment {
         mNatureItem.add(new NatureItem("Sky", R.drawable.sky));
     }
 
+    public void clicked(String clickedItemName) {
+        AsyncTaskExample asyncTask = new AsyncTaskExample();
+        if (clickedItemName == "flower") {
+            asyncTask.execute("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/sunflower-1508785046.jpg");
+        }
+        else if (clickedItemName == "Nature") {
+            asyncTask.execute("https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg");
+        }
+        else if (clickedItemName == "Sky") {
+            asyncTask.execute("https://images.unsplash.com/photo-1463947628408-f8581a2f4aca?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8c2t5fGVufDB8fDB8&ixlib=rb-1.2.1&w=1000&q=80");
+        }
+        else
+        {
+            Toast.makeText(getActivity(), clickedItemName + "selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //The Async class to download image
-    private class AsyncTaskExample extends AsyncTask<String, String, Bitmap> {
+    public class AsyncTaskExample extends AsyncTask<String, String, Bitmap> {
 
         @Override
         protected void onPreExecute() {
