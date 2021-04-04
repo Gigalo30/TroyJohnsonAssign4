@@ -11,14 +11,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.content.Context;
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,17 +29,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 public class TroyActivity extends AppCompatActivity {
-
+    private static final int REQUEST_CODE = 100;
+    String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
+    Location gps;
     private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         //set default fragment
         loadFragment(new HomeFrag());
@@ -127,15 +134,13 @@ public class TroyActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.game_menu, menu);
         return true;
+
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -148,7 +153,7 @@ public class TroyActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.loc:
-                Toast.makeText(this, "My name is Troy Johnson", Toast.LENGTH_LONG).show();;
+                fetchLastlocation();
                 break;
             case R.id.sms:
                 Toast.makeText(this, "My name is Troy Johnson", Toast.LENGTH_LONG).show();
@@ -161,6 +166,28 @@ public class TroyActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    private void fetchLastlocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+            return;
+        }
+        gps = new Location(String.valueOf(TroyActivity.this));
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+
+            String lat = String.valueOf(latitude);
+             String longi = String.valueOf(longitude);
+
+        Snackbar.make(mDrawerLayout,"Your Location is -      Lat: " + lat + "       " + "   Long: " + " " + longi , Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+
+
+    }
+
+
 
 
     public void loadFragment(Fragment fragment) {

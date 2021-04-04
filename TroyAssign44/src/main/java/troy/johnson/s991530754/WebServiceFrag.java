@@ -1,5 +1,7 @@
 package troy.johnson.s991530754;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,6 +26,7 @@ public class WebServiceFrag extends Fragment  {
     public static String AppId = "cde4629101a96793e89e3fde42e35739";
     public static String lat = "35";
     public static String lon = "139";
+
 
     public WebServiceFrag() {
     }
@@ -41,19 +46,45 @@ public class WebServiceFrag extends Fragment  {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getCurrentData(tAddress);
+                if(zipCode.getText().toString().isEmpty() || zipCode.getText().toString().length() < 5){
+                    AlertDialog.Builder dialog=new AlertDialog.Builder(getActivity());
+                    dialog.setIcon(R.drawable.alert);
+                    //dialog.setError("The Field cannot be empty or cannot be more than 5 digits");
+                    zipCode.setError("The Field cannot be empty or cannot be more than 5 digits");
+                    dialog.setTitle("Try again Fields cannot be empty or cannot be more than 5 digits");
+                    dialog.setPositiveButton("Ok",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    Toast.makeText(getActivity(),"Yes is clicked",Toast.LENGTH_LONG).show();
+                                }
+                            });
+                    dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(getActivity(),"cancel is clicked",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    AlertDialog alertDialog=dialog.create();
+                    alertDialog.show();
+                }
+
+                else {
+                    getCurrentData(tAddress, zipCode);
+                }
             }
             });
         return root;
     }
 
 
-          public void getCurrentData(TextView tAddress) {
+          public void getCurrentData(TextView tAddress, TextView zipCode) {
               Retrofit retrofit = new Retrofit.Builder()
                       .baseUrl(BaseUrl)
                       .addConverterFactory(GsonConverterFactory.create())
                       .build();
               WeatherService service = retrofit.create(WeatherService.class);
+
               Call<WeatherResponse> call = service.getCurrentWeatherData(lat, lon, AppId);
               call.enqueue(new Callback<WeatherResponse>() {
 
@@ -65,6 +96,9 @@ public class WebServiceFrag extends Fragment  {
 
                             String stringBuilder = "Country: " +
                                     weatherResponse.sys.country +
+                                    "\n" +
+                                    "Name: " +
+                                    weatherResponse.name +
                                     "\n" +
                                     "Temperature: " +
                                     weatherResponse.main.temp +
@@ -78,8 +112,14 @@ public class WebServiceFrag extends Fragment  {
                                     "Humidity: " +
                                     weatherResponse.main.humidity +
                                     "\n" +
-                                    "Pressure: " +
-                                    weatherResponse.main.pressure;
+                                    "Latitude: " +
+                                    weatherResponse.coord.lon +
+                                    "\n" +
+                                    "Longitude: " +
+                                    weatherResponse.coord.lat +
+                                      "\n" +
+                                    "Zip code: " +
+                                    weatherResponse.cod;
 
                             tAddress.setText(stringBuilder);
                         }
