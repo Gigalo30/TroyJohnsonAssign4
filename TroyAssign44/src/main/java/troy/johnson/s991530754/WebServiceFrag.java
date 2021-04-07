@@ -28,15 +28,14 @@ public class WebServiceFrag extends Fragment  {
     public static String lon = "139";
 
 
+
     public WebServiceFrag() {
     }
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_web_service, container, false);
-
 
         EditText zipCode = (EditText)root.findViewById(R.id.troyED);
         TextView tAddress = root.findViewById(R.id.troyTV2);
@@ -79,18 +78,19 @@ public class WebServiceFrag extends Fragment  {
 
 
           public void getCurrentData(TextView tAddress, TextView zipCode) {
+             zipCode.getText().toString();
               Retrofit retrofit = new Retrofit.Builder()
                       .baseUrl(BaseUrl)
                       .addConverterFactory(GsonConverterFactory.create())
                       .build();
               WeatherService service = retrofit.create(WeatherService.class);
 
-              Call<WeatherResponse> call = service.getCurrentWeatherData(lat, lon, AppId);
+              Call<WeatherResponse> call = service.getCurrentWeatherData(lat, lon,  AppId);
               call.enqueue(new Callback<WeatherResponse>() {
 
                     @Override
                     public void onResponse(@NonNull Call<WeatherResponse> call, @NonNull Response<WeatherResponse> response) {
-                        if (response.code() == 200) {
+                        if (response.code() == 200){
                             WeatherResponse weatherResponse = response.body();
                             assert weatherResponse != null;
 
@@ -119,11 +119,12 @@ public class WebServiceFrag extends Fragment  {
                                     weatherResponse.coord.lat +
                                       "\n" +
                                     "Zip code: " +
-                                    weatherResponse.cod;
+                                    zipCode.getText().toString();
 
                             tAddress.setText(stringBuilder);
                         }
-                    }
+                        }
+
 
                     @Override
                     public void onFailure(@NonNull Call<WeatherResponse> call, @NonNull Throwable t) {

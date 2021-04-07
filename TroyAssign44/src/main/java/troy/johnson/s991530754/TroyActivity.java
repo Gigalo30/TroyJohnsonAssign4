@@ -7,43 +7,57 @@
 
 package troy.johnson.s991530754;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+
 public class TroyActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE = 100;
-    String mPermission = Manifest.permission.ACCESS_FINE_LOCATION;
-    Location gps;
+    private static final String TAG = "TroyActivity";
+    int LOCATION_REQUEST_CODE = 10001;
     private DrawerLayout mDrawerLayout;
+    LocationManager locationManager;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         //set default fragment
         loadFragment(new HomeFrag());
@@ -139,7 +153,6 @@ public class TroyActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.game_menu, menu);
         return true;
-
     }
 
     @Override
@@ -153,7 +166,7 @@ public class TroyActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.loc:
-                fetchLastlocation();
+                getLastLocation();
                 break;
             case R.id.sms:
                 Toast.makeText(this, "My name is Troy Johnson", Toast.LENGTH_LONG).show();
@@ -168,25 +181,46 @@ public class TroyActivity extends AppCompatActivity {
     }
 
 
-    private void fetchLastlocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private void getLastLocation() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+            locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
-            return;
+                        String lat = String.valueOf(latitude);
+                        String longi = String.valueOf(longitude);
+
+                        Snackbar.make(mDrawerLayout, "Your Location is -      Lat: " + lat + "       " + "   Long: " + " " + longi, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+
+                    else
+                        {
+
+                        Snackbar.make(mDrawerLayout, "Your Location is null" + " ", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }
+            });
         }
-        gps = new Location(String.valueOf(TroyActivity.this));
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
 
-            String lat = String.valueOf(latitude);
-             String longi = String.valueOf(longitude);
+        else {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_REQUEST_CODE);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Log.d(TAG, "askLocationPermission: you should show an alert dialog....");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        LOCATION_REQUEST_CODE);
+            }
 
-        Snackbar.make(mDrawerLayout,"Your Location is -      Lat: " + lat + "       " + "   Long: " + " " + longi , Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
 
-
-    }
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        LOCATION_REQUEST_CODE);
+            }
+        }
 
 
 
@@ -195,7 +229,6 @@ public class TroyActivity extends AppCompatActivity {
         transaction.replace(R.id.flContent, fragment);
         transaction.commit();
     }
-
 
 
     @Override
