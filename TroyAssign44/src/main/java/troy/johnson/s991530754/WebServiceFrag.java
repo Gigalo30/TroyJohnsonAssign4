@@ -1,9 +1,18 @@
+/**
+ * Troy Johnson s991530754
+ *  This is Assignment 04
+ *
+ */
+
+
 package troy.johnson.s991530754;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +23,58 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class WebServiceFrag extends Fragment  {
+public class WebServiceFrag extends Fragment {
     public static String BaseUrl = "http://api.openweathermap.org/";
     public static String AppId = "cde4629101a96793e89e3fde42e35739";
     public static String lat = "35";
     public static String lon = "139";
+
+
+    class Weather extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... zipCode) {
+            try {
+                URL url = new URL(zipCode[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream is = connection.getInputStream();
+                InputStreamReader isr = new InputStreamReader(is);
+
+                int data = isr.read();
+                String content = "";
+                char ch;
+                while (data != -1) {
+                    ch = (char) data;
+                    content = content + ch;
+                    data = isr.read();
+                }
+                return content;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+    }
 
     public WebServiceFrag() {
     }
@@ -33,7 +83,7 @@ public class WebServiceFrag extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_web_service, container, false);
-        EditText zipCode = (EditText)root.findViewById(R.id.troyED);
+        EditText zipCode = (EditText) root.findViewById(R.id.troyED);
         TextView tAddress = root.findViewById(R.id.troyTV2);
         Button button = (Button) root.findViewById(R.id.troyBtn);
 
@@ -43,8 +93,8 @@ public class WebServiceFrag extends Fragment  {
             public void onClick(View view) {
                 CharSequence text = getString(R.string.Toast_text);
                 CharSequence text1 = getString(R.string.Tast_cancel);
-                if(zipCode.getText().toString().isEmpty() || zipCode.getText().toString().length() < 5){
-                    AlertDialog.Builder dialog=new AlertDialog.Builder(getActivity());
+                if (zipCode.getText().toString().isEmpty() || zipCode.getText().toString().length() < 5) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                     dialog.setIcon(R.drawable.alert);
                     //dialog.setError("The Field cannot be empty or cannot be more than 5 digits");
                     zipCode.setError(getString(R.string.setError));
@@ -53,84 +103,66 @@ public class WebServiceFrag extends Fragment  {
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
-                                    Toast.makeText(getActivity(),text,Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
                                 }
                             });
-                    dialog.setNegativeButton(R.string.dialog_negative,new DialogInterface.OnClickListener() {
+                    dialog.setNegativeButton(R.string.dialog_negative, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getActivity(),text1,Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), text1, Toast.LENGTH_LONG).show();
                         }
                     });
-                    AlertDialog alertDialog=dialog.create();
+                    AlertDialog alertDialog = dialog.create();
                     alertDialog.show();
-                }
-
-                else {
+                } else {
                     getCurrentData(tAddress, zipCode);
                 }
             }
-            });
+        });
         return root;
     }
 
 
-          public void getCurrentData(TextView tAddress, TextView zipCode) {
-             zipCode.getText().toString();
-              Retrofit retrofit = new Retrofit.Builder()
-                      .baseUrl(BaseUrl)
-                      .addConverterFactory(GsonConverterFactory.create())
-                      .build();
-              WeatherService service = retrofit.create(WeatherService.class);
+    public void getCurrentData(TextView tAddress, TextView zipCode) {
+        String zName = zipCode.getText().toString();
+        String content;
+        Weather weather = new Weather();
+        try {
+            content = weather.execute("https://samples.openweathermap.org/data/2.5/weather?zip=" + zName + ",us&appid=cde4629101a96793e89e3fde42e35739").get();
+            Log.i("contentData", content);
 
-              Call<WeatherResponse> call = service.getCurrentWeatherData(lat, lon,  AppId);
-              call.enqueue(new Callback<WeatherResponse>() {
+            JSONObject jsonObject = new JSONObject(content);
+            String mainTemperature = jsonObject.getString("main");
+            String Coord = jsonObject.getString("coord");
+            String Name = jsonObject.getString("sys");
 
-                    @Override
-                    public void onResponse(@NonNull Call<WeatherResponse> call, @NonNull Response<WeatherResponse> response) {
-                        if (response.code() == 200){
-                            WeatherResponse weatherResponse = response.body();
-                            assert weatherResponse != null;
+            String temperature = "";
+            String humidity = "";
+            String longitude = "";
+            String latitude = "";
+            String name = "";
+            String zip = "";
 
-                            String stringBuilder = getString(R.string.country) +
-                                    weatherResponse.sys.country +
-                                    "\n" +
-                                    getString(R.string.c_name) +
-                                    weatherResponse.name +
-                                    "\n" +
-                                    getString(R.string.c_temp) +
-                                    weatherResponse.main.temp +
-                                    "\n" +
-                                    getString(R.string.c_tempMin) +
-                                    weatherResponse.main.temp_min +
-                                    "\n" +
-                                    getString(R.string.c_tempMax) +
-                                    weatherResponse.main.temp_max +
-                                    "\n" +
-                                    getString(R.string.c_hum) +
-                                    weatherResponse.main.humidity +
-                                    "\n" +
-                                    getString(R.string.c_lat) +
-                                    weatherResponse.coord.lon +
-                                    "\n" +
-                                    getString(R.string.c_long) +
-                                    weatherResponse.coord.lat +
-                                      "\n" +
-                                    getString(R.string.c_zip) +
-                                    zipCode.getText().toString();
+            JSONObject mainPart = new JSONObject(mainTemperature);
+            temperature = mainPart.getString("temp");
+            humidity = mainPart.getString("humidity");
 
-                            tAddress.setText(stringBuilder);
-                        }
-                        }
+            JSONObject mainCoord = new JSONObject(Coord);
+            longitude = mainCoord.getString("lon");
+            latitude = mainCoord.getString("lat");
 
+            JSONObject mainName = new JSONObject(Name);
+            name = mainName.getString("country");
 
-                    @Override
-                    public void onFailure(@NonNull Call<WeatherResponse> call, @NonNull Throwable t) {
-                        tAddress.setText(t.getMessage());
-                    }
-                });
-            }
+            String resultText = "Temperature: " + temperature + "\nHumidity: " + humidity + "\nLongitude: " + longitude + "\nLatitude: " + latitude + "\nName: " + name + "\nZip: " + zName;
+            tAddress.setText(resultText);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+
 
 
 
