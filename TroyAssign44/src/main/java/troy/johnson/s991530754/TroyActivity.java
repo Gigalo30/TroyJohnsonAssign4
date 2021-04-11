@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -84,9 +85,6 @@ public class TroyActivity extends AppCompatActivity {
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-                        //display in short period of time
                         Toast.makeText(getApplicationContext(), menuItem.getTitle(),
                                 Toast.LENGTH_LONG).show();
 
@@ -157,19 +155,20 @@ public class TroyActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        CharSequence text3 = (getString(R.string.myName));
         Intent intent = null;
 
         switch (item.getItemId()) {
             case R.id.help:
                 intent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://www.amazon.ca/"));
+                        Uri.parse(getString(R.string.web_link)));
                 startActivity(intent);
                 break;
             case R.id.loc:
                 getLastLocation();
                 break;
             case R.id.sms:
-                Toast.makeText(this, "My name is Troy Johnson", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, text3, Toast.LENGTH_LONG).show();
                 break;
             case android.R.id.home: // START to slide from left
                 mDrawerLayout.openDrawer(GravityCompat.START);
@@ -193,15 +192,14 @@ public class TroyActivity extends AppCompatActivity {
                         String lat = String.valueOf(latitude);
                         String longi = String.valueOf(longitude);
 
-                        Snackbar.make(mDrawerLayout, "Your Location is -      Lat: " + lat + "       " + "   Long: " + " " + longi, Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                        Snackbar.make(mDrawerLayout, getString(R.string.snack_loc) + lat + "       " + getString(R.string.sanck_long1) + " " + longi, Snackbar.LENGTH_LONG)
+                                .setAction(R.string.snack_action2, null).show();
                     }
 
                     else
-                        {
-
-                        Snackbar.make(mDrawerLayout, "Your Location is null" + " ", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
+                    {
+                        Snackbar.make(mDrawerLayout, getString(R.string.snackBar_null) + " ", Snackbar.LENGTH_LONG)
+                                .setAction(R.string.snack_action, null).show();
                     }
                 }
             });
@@ -211,20 +209,20 @@ public class TroyActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
                     LOCATION_REQUEST_CODE);
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Log.d(TAG, "askLocationPermission: you should show an alert dialog....");
+                Log.d(TAG, getString(R.string.permission1));
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         LOCATION_REQUEST_CODE);
             }
 
 
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        LOCATION_REQUEST_CODE);
-            }
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_REQUEST_CODE);
         }
+    }
 
 
 
-    public void loadFragment(Fragment fragment) {
+        public void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.flContent, fragment);
         transaction.commit();

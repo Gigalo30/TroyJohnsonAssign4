@@ -32,7 +32,7 @@ public class HomeFrag extends Fragment {
         String currentDateTimeString = java.text.DateFormat.getDateInstance().format(new Date());
         date.setText(currentDateTimeString);
         java.util.Date noteTS = Calendar.getInstance().getTime();
-        String time = "hh:mm"; // 12:00
+        String time = getString(R.string.time_format); // 12:00
         tvTime.setText(DateFormat.format(time, noteTS));
 
 

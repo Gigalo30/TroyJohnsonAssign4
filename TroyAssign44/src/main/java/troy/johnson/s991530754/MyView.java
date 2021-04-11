@@ -31,7 +31,7 @@ public class MyView extends View {
         init(context);
     }
 
-    private void init(Context ctx){
+    private void init(Context ctx) {
         MyContext = ctx;
         BackPaint.setStyle(Paint.Style.FILL);
         BackPaint.setColor(Color.BLACK);
@@ -46,9 +46,6 @@ public class MyView extends View {
     }
 
 
-
-    //Linear Gradient
-
 // @Override
 
     protected void onDraw(Canvas canvas) {
@@ -56,13 +53,13 @@ public class MyView extends View {
         float w, h, cx, cy, radius;
         w = getWidth();
         h = getHeight();
-        cx = w/2;
-        cy = h/2;
+        cx = w / 2;
+        cy = h / 2;
 
-        if(w > h){
-            radius = h/4;
-        }else{
-            radius = w/4;
+        if (w > h) {
+            radius = h / 4;
+        } else {
+            radius = w / 4;
         }
 
         // first rect
@@ -89,55 +86,14 @@ public class MyView extends View {
 
         Shader linearGradientShader1;
         linearGradientShader1 = new LinearGradient(
-                cx, cy, cx+radius, cy+radius,
+                cx, cy, cx + radius, cy + radius,
                 shaderColor0, shaderColor2, Shader.TileMode.MIRROR);
 
         // circle
         MyPaint.setShader(linearGradientShader1);
         canvas.drawCircle(cx, cy, radius, MyPaint);
 
-    };
-
-
-//SweepGradient
-/*
-@Override
-	protected void onDraw(Canvas canvas) {
-
-		  float w, h, cx, cy, radius;
-		  w = getWidth();
-		  h = getHeight();
-		  cx = w/2;
-		  cy = h/2;
-
-		  if(w > h){
-		   radius = h/4;
-		  }else{
-		   radius = w/4;
-		  }
-
-		  canvas.drawRect(0, 0, w, h, BackPaint);
-
-		  Paint MyPaint = new Paint();
-		  MyPaint.setStyle(Paint.Style.FILL);
-
-		  float shaderCx = cx;
-		  float shaderCy = cy;
-		  int shaderColor0 = Color.RED;
-          int shaderColor2 = Color.GREEN;
-		  int shaderColor1 = Color.BLUE;
-
-		  int[] colors = {shaderColor0, shaderColor1, shaderColor2};
-		  float[] spaces = {0.3f, 0.6f, 0.1f };
-
-		  MyPaint.setAntiAlias(true);
-		  MyPaint.setShader(new SweepGradient(
-		        shaderCx,
-		        shaderCy,
-		        colors, spaces));
-
-		  canvas.drawCircle(cx, cy, radius, MyPaint);
-	};
-*/
+    }
 }
+
 

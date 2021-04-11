@@ -1,6 +1,7 @@
 package troy.johnson.s991530754;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,13 +21,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WebServiceFrag extends Fragment  {
-
     public static String BaseUrl = "http://api.openweathermap.org/";
     public static String AppId = "cde4629101a96793e89e3fde42e35739";
     public static String lat = "35";
     public static String lon = "139";
-
-
 
     public WebServiceFrag() {
     }
@@ -36,7 +33,6 @@ public class WebServiceFrag extends Fragment  {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_web_service, container, false);
-
         EditText zipCode = (EditText)root.findViewById(R.id.troyED);
         TextView tAddress = root.findViewById(R.id.troyTV2);
         Button button = (Button) root.findViewById(R.id.troyBtn);
@@ -45,23 +41,25 @@ public class WebServiceFrag extends Fragment  {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CharSequence text = getString(R.string.Toast_text);
+                CharSequence text1 = getString(R.string.Tast_cancel);
                 if(zipCode.getText().toString().isEmpty() || zipCode.getText().toString().length() < 5){
                     AlertDialog.Builder dialog=new AlertDialog.Builder(getActivity());
                     dialog.setIcon(R.drawable.alert);
                     //dialog.setError("The Field cannot be empty or cannot be more than 5 digits");
-                    zipCode.setError("The Field cannot be empty or cannot be more than 5 digits");
-                    dialog.setTitle("Try again Fields cannot be empty or cannot be more than 5 digits");
-                    dialog.setPositiveButton("Ok",
+                    zipCode.setError(getString(R.string.setError));
+                    dialog.setTitle(R.string.setTitle);
+                    dialog.setPositiveButton(R.string.setB,
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
-                                    Toast.makeText(getActivity(),"Yes is clicked",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getActivity(),text,Toast.LENGTH_LONG).show();
                                 }
                             });
-                    dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+                    dialog.setNegativeButton(R.string.dialog_negative,new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(getActivity(),"cancel is clicked",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(),text1,Toast.LENGTH_LONG).show();
                         }
                     });
                     AlertDialog alertDialog=dialog.create();
@@ -94,31 +92,31 @@ public class WebServiceFrag extends Fragment  {
                             WeatherResponse weatherResponse = response.body();
                             assert weatherResponse != null;
 
-                            String stringBuilder = "Country: " +
+                            String stringBuilder = getString(R.string.country) +
                                     weatherResponse.sys.country +
                                     "\n" +
-                                    "Name: " +
+                                    getString(R.string.c_name) +
                                     weatherResponse.name +
                                     "\n" +
-                                    "Temperature: " +
+                                    getString(R.string.c_temp) +
                                     weatherResponse.main.temp +
                                     "\n" +
-                                    "Temperature(Min): " +
+                                    getString(R.string.c_tempMin) +
                                     weatherResponse.main.temp_min +
                                     "\n" +
-                                    "Temperature(Max): " +
+                                    getString(R.string.c_tempMax) +
                                     weatherResponse.main.temp_max +
                                     "\n" +
-                                    "Humidity: " +
+                                    getString(R.string.c_hum) +
                                     weatherResponse.main.humidity +
                                     "\n" +
-                                    "Latitude: " +
+                                    getString(R.string.c_lat) +
                                     weatherResponse.coord.lon +
                                     "\n" +
-                                    "Longitude: " +
+                                    getString(R.string.c_long) +
                                     weatherResponse.coord.lat +
                                       "\n" +
-                                    "Zip code: " +
+                                    getString(R.string.c_zip) +
                                     zipCode.getText().toString();
 
                             tAddress.setText(stringBuilder);

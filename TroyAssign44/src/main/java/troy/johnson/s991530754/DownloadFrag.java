@@ -72,39 +72,39 @@ public class DownloadFrag extends Fragment {
     }
 
 
-
     private void initList() {
+
         mNatureItem = new ArrayList<>();
-        mNatureItem.add(new NatureItem("flower", R.drawable.flower));
-        mNatureItem.add(new NatureItem("Nature", R.drawable.nature));
-        mNatureItem.add(new NatureItem("Sky", R.drawable.sky));
+        mNatureItem.add(new NatureItem(getString(R.string.n_item1), R.drawable.flower));
+        mNatureItem.add(new NatureItem(getString(R.string.n_item2), R.drawable.nature));
+        mNatureItem.add(new NatureItem(getString(R.string.n_item3), R.drawable.sky));
     }
 
     public void clicked(String clickedItemName) {
+        CharSequence text = getString(R.string.selected);
         AsyncTaskExample asyncTask = new AsyncTaskExample();
-        if (clickedItemName == "flower") {
-            asyncTask.execute("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/sunflower-1508785046.jpg");
+        if (clickedItemName == getString(R.string.n_item1)) {
+            asyncTask.execute(getString(R.string.imgDwn1));
         }
-        else if (clickedItemName == "Nature") {
-            asyncTask.execute("https://thumbs.dreamstime.com/b/environment-earth-day-hands-trees-growing-seedlings-bokeh-green-background-female-hand-holding-tree-nature-field-gra-130247647.jpg");
+        else if (clickedItemName == getString(R.string.n_item2)) {
+            asyncTask.execute(getString(R.string.imgDwn2));
         }
-        else if (clickedItemName == "Sky") {
-            asyncTask.execute("https://images.unsplash.com/photo-1463947628408-f8581a2f4aca?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8c2t5fGVufDB8fDB8&ixlib=rb-1.2.1&w=1000&q=80");
+        else if (clickedItemName == getString(R.string.n_item3)) {
+            asyncTask.execute(getString(R.string.imgDwn3));
         }
         else
         {
-            Toast.makeText(getActivity(), clickedItemName + "selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), clickedItemName + text, Toast.LENGTH_SHORT).show();
         }
     }
 
-    //The Async class to download image
     public class AsyncTaskExample extends AsyncTask<String, String, Bitmap> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             p = new ProgressDialog(getActivity());
-            p.setMessage("Please wait...It is downloading");
+            p.setMessage(getString(R.string.dwnSetmessage));
             p.setIndeterminate(false);
             p.setCancelable(false);
             p.show();

@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 public class SettingsFrag extends Fragment {
     public SettingsFrag() {
 
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

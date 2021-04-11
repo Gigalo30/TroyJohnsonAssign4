@@ -8,7 +8,6 @@ public class NatureItem {
     public NatureItem(String natureItem, int flagImage) {
         mNatureItem = natureItem;
         mFlagImage = flagImage;
-
     }
 
     public String getNatureItem(){
