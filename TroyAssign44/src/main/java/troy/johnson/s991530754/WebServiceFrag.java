@@ -41,11 +41,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WebServiceFrag extends Fragment {
-    public static String BaseUrl = "http://api.openweathermap.org/";
-    public static String AppId = "cde4629101a96793e89e3fde42e35739";
-    public static String lat = "35";
-    public static String lon = "139";
-
 
     class Weather extends AsyncTask<String, Void, String> {
 
