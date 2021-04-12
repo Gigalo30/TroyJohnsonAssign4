@@ -51,4 +51,20 @@
     <string name="troyWB">Web Services</string>
     <string name="currentDT">Current Data</string>
     <string name="headerT">My header title</string>
+    <string name="url1">https://samples.openweathermap.org/data/2.5/weather?zip=</string>
+    <string name="url2"><![CDATA[,us&appid=cde4629101a96793e89e3fde42e35739]]></string>
+    <string name="main">main</string>
+    <string name="coord">coord</string>
+    <string name="sys">sys</string>
+    <string name="temp">temp</string>
+    <string name="hum">humidity</string>
+    <string name="longitude">lon</string>
+    <string name="latitude">lat</string>
+    <string name="count">country</string>
+    <string name="resultTemp">\"Temperature: \"</string>
+    <string name="resultHum">\"\nHumidity: \"</string>
+    <string name="resultLong">\"\nLongitude: \"</string>
+    <string name="resultLat">\"\nLatitude: \"</string>
+    <string name="resultNM">\"\nName: \"</string>
+    <string name="resultZP">\"\nZip: \"</string>
 </resources>

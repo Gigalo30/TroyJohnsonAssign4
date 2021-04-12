@@ -123,13 +123,12 @@ public class WebServiceFrag extends Fragment {
         String content;
         Weather weather = new Weather();
         try {
-            content = weather.execute("https://samples.openweathermap.org/data/2.5/weather?zip=" + zName + ",us&appid=cde4629101a96793e89e3fde42e35739").get();
-            Log.i("contentData", content);
+            content = weather.execute(getString(R.string.url1) + zName + getString(R.string.url2)).get();
 
             JSONObject jsonObject = new JSONObject(content);
-            String mainTemperature = jsonObject.getString("main");
-            String Coord = jsonObject.getString("coord");
-            String Name = jsonObject.getString("sys");
+            String mainTemperature = jsonObject.getString(getString(R.string.main));
+            String Coord = jsonObject.getString(getString(R.string.coord));
+            String Name = jsonObject.getString(getString(R.string.sys));
 
             String temperature = "";
             String humidity = "";
@@ -139,17 +138,19 @@ public class WebServiceFrag extends Fragment {
             String zip = "";
 
             JSONObject mainPart = new JSONObject(mainTemperature);
-            temperature = mainPart.getString("temp");
-            humidity = mainPart.getString("humidity");
+            temperature = mainPart.getString(getString(R.string.temp));
+            double temp =Double.valueOf(temperature).doubleValue();
+            Double tempi=temp*5/9;
+            humidity = mainPart.getString(getString(R.string.hum));
 
             JSONObject mainCoord = new JSONObject(Coord);
-            longitude = mainCoord.getString("lon");
-            latitude = mainCoord.getString("lat");
+            longitude = mainCoord.getString(getString(R.string.longitude));
+            latitude = mainCoord.getString(getString(R.string.latitude));
 
             JSONObject mainName = new JSONObject(Name);
-            name = mainName.getString("country");
+            name = mainName.getString(getString(R.string.count));
 
-            String resultText = "Temperature: " + temperature + "\nHumidity: " + humidity + "\nLongitude: " + longitude + "\nLatitude: " + latitude + "\nName: " + name + "\nZip: " + zName;
+            String resultText = getString(R.string.resultTemp) + tempi + getString(R.string.resultHum) + humidity + getString(R.string.resultLong) + longitude + getString(R.string.resultLat) + latitude + getString(R.string.resultNM) + name + getString(R.string.resultZP) + zName;
             tAddress.setText(resultText);
 
         } catch (Exception e) {

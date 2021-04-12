@@ -29,8 +29,8 @@
     <string name="myName">My name is Troy Johnson</string>
     <string name="snackBar_null">Your Location is null</string>
     <string name="snack_action">Action</string>
-    <string name="snack_loc">\"Your Location is -      Lat: \"</string>
-    <string name="sanck_long1">\"   Long: \"</string>
+    <string name="snack_loc">Your Location is -      Lat: </string>
+    <string name="sanck_long1">  Long: </string>
     <string name="snack_action2">Action</string>
     <string name="permission1">askLocationPermission: you should show an alert dialog....</string>
     <string name="time_format">hh:mm</string>
@@ -52,5 +52,21 @@
     <string name="troyWB">Web Services</string>
     <string name="currentDT">Current Data</string>
     <string name="headerT">My header title</string>
+    <string name="url1">https://samples.openweathermap.org/data/2.5/weather?zip=</string>
+    <string name="url2"><![CDATA[,us&appid=cde4629101a96793e89e3fde42e35739]]></string>
+    <string name="main">main</string>
+    <string name="coord">coord</string>
+    <string name="sys">sys</string>
+    <string name="temp">temp</string>
+    <string name="hum">humidity</string>
+    <string name="longitude">lon</string>
+    <string name="latitude">lat</string>
+    <string name="count">country</string>
+    <string name="resultTemp">Temperature: </string>
+    <string name="resultHum">\"\nHumidity: \"</string>
+    <string name="resultLong">\"\nLongitude: \"</string>
+    <string name="resultLat">\"\nLatitude: \"</string>
+    <string name="resultNM">\"\nCountry: \"</string>
+    <string name="resultZP">\"\nZip: \"</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
